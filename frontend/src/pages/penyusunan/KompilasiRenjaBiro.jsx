@@ -49,18 +49,23 @@ export default function KompilasiRenjaBiro() {
   const [tahun, setTahun] = useState('2027');
   const [selected, setSelected] = useState([]);
 
-  const { data: allDokumen = [] } = useQuery({
+  const { data: allDokumenResp } = useQuery({
     queryKey: ['dokumen-renja-kompilasi', tahun],
     queryFn: () => api.list('dokumen', { tahun: parseInt(tahun), limit: 200 }),
   });
-  const { data: skorList = [] } = useQuery({
+  const allDokumen = Array.isArray(allDokumenResp?.data) ? allDokumenResp.data : [];
+
+  const { data: skorListResp } = useQuery({
     queryKey: ['skor-dokumen-kompilasi', tahun],
     queryFn: () => api.list('skor', { tahun: parseInt(tahun) }),
   });
-  const { data: hasilList = [] } = useQuery({
+  const skorList = Array.isArray(skorListResp?.data) ? skorListResp.data : [];
+
+  const { data: hasilListResp } = useQuery({
     queryKey: ['hasil-kompilasi', tahun],
     queryFn: () => api.list('pemeriksaan', { tahun: parseInt(tahun) }),
   });
+  const hasilList = Array.isArray(hasilListResp?.data) ? hasilListResp.data : [];
 
   // Ambil dokumen terbaru per biro (prioritas: terverifikasi/layak/final_internal)
   function getLatestDokBiro(namaBiro) {

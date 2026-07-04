@@ -41,22 +41,29 @@ function StatCard({ label, value, sub, icon: IconComp, color }) {
 }
 
 export default function DashboardPenyusunan() {
-  const { data: dokumen = [] } = useQuery({
+  const { data: dokumenResp } = useQuery({
     queryKey: ['dok-penyusunan', TAHUN],
     queryFn: () => api.list("dokumenrenja", { limit: 200 }),
   });
-  const { data: skorList = [] } = useQuery({
+  const dokumen = Array.isArray(dokumenResp?.data) ? dokumenResp.data : [];
+
+  const { data: skorListResp } = useQuery({
     queryKey: ['skor-penyusunan', TAHUN],
     queryFn: () => api.list('skor', { tahun: TAHUN }),
   });
-  const { data: hasilList = [] } = useQuery({
+  const skorList = Array.isArray(skorListResp?.data) ? skorListResp.data : [];
+
+  const { data: hasilListResp } = useQuery({
     queryKey: ['hasil-penyusunan', TAHUN],
     queryFn: () => api.list('pemeriksaan', { tahun: TAHUN }),
   });
-  const { data: draftList = [] } = useQuery({
+  const hasilList = Array.isArray(hasilListResp?.data) ? hasilListResp.data : [];
+
+  const { data: draftListResp } = useQuery({
     queryKey: ['draft-renja-list'],
     queryFn: () => api.list('draft', { limit: 10 }),
   });
+  const draftList = Array.isArray(draftListResp?.data) ? draftListResp.data : [];
 
   const biroUpload = BIRO_LIST.filter(b => dokumen.some(d => d.nama_biro === b));
   const biroVerif = BIRO_LIST.filter(b => skorList.some(s => s.nama_biro === b && ['layak_kirim','sudah_dikirim'].includes(s.status_final)));

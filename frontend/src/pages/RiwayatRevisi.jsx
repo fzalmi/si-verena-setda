@@ -15,25 +15,30 @@ export default function RiwayatRevisi() {
   const role = user?.role;
   const [selectedBiro, setSelectedBiro] = useState(getSingleBiroForRole(role) || '');
 
-  const { data: allBiroList = [] } = useQuery({
+  const { data: allBiroResp } = useQuery({
     queryKey: ['biro-list'],
     queryFn: () => api.list("biro"),
   });
+  const allBiroList = Array.isArray(allBiroResp?.data) ? allBiroResp.data : [];
   const biroList = filterBiroByRole(role, allBiroList);
 
-  const { data: dokumen = [] } = useQuery({
+  const { data: dokumenResp } = useQuery({
     queryKey: ['dokumen-riwayat', selectedBiro],
     queryFn: () => selectedBiro
       ? api.list("dokumenrenja", { limit: 100 })
-      : [],
+      : { data: [] },
     enabled: !!selectedBiro,
   });
+  const dokumen = Array.isArray(dokumenResp?.data) ? dokumenResp.data : [];
 
-  const { data: revisi = [] } = useQuery({
+  const { data: revisiResp } = useQuery({
     queryKey: ['revisi-list', selectedBiro],
     queryFn: () => selectedBiro
       ? api.list("riwayatrevisi", { limit: 50 })
-      : [],
+      : { data: [] },
+    enabled: !!selectedBiro,
+  });
+  const revisi = Array.isArray(revisiResp?.data) ? revisiResp.data : [];
     enabled: !!selectedBiro,
   });
 

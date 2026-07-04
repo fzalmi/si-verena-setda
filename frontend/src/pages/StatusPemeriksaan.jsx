@@ -49,21 +49,24 @@ export default function StatusPemeriksaan() {
   const [tahun, setTahun] = useState('2027');
   const [expand, setExpand] = useState(null);
 
-  const { data: allBiroList = [] } = useQuery({
+  const { data: allBiroResp } = useQuery({
     queryKey: ['biro-list'],
     queryFn: () => api.list("biro"),
   });
+  const allBiroList = Array.isArray(allBiroResp?.data) ? allBiroResp.data : [];
   const biroList = filterBiroByRole(role, allBiroList);
 
-  const { data: skorList = [], isLoading: loadingSkor, refetch } = useQuery({
+  const { data: skorResp, isLoading: loadingSkor, refetch } = useQuery({
     queryKey: ['skor-dokumen', tahun],
     queryFn: () => api.list('skor', { tahun: parseInt(tahun), limit: 50 }),
   });
+  const skorList = Array.isArray(skorResp?.data) ? skorResp.data : [];
 
-  const { data: hasilList = [] } = useQuery({
+  const { data: hasilResp } = useQuery({
     queryKey: ['hasil-all', tahun],
     queryFn: () => api.list('pemeriksaan', { tahun: parseInt(tahun), limit: 500 }),
   });
+  const hasilList = Array.isArray(hasilResp?.data) ? hasilResp.data : [];
 
   // Sembunyikan SETDA untuk role yang dibatasi
   const showSetda = !isRestrictedRole(role);

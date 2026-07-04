@@ -54,15 +54,17 @@ export default function DokumenDiunggah() {
   const [filterTahun, setFilterTahun] = useState('semua');
   const [search, setSearch] = useState('');
 
-  const { data: dokumen = [], isLoading } = useQuery({
+  const { data: dokumenResponse, isLoading } = useQuery({
     queryKey: ['dokumen-renja-all'],
     queryFn: () => api.list('dokumen', { limit: 200 }),
   });
 
-  const { data: allBiroList = [] } = useQuery({
+  const { data: allBiroResponse } = useQuery({
     queryKey: ['biro-list'],
     queryFn: () => api.list("biro"),
   });
+  const dokumen = Array.isArray(dokumenResponse?.data) ? dokumenResponse.data : Array.isArray(dokumenResponse) ? dokumenResponse : [];
+  const allBiroList = Array.isArray(allBiroResponse?.data) ? allBiroResponse.data : Array.isArray(allBiroResponse) ? allBiroResponse : [];
   const biroList = filterBiroByRole(role, allBiroList);
 
   const deleteMutation = useMutation({

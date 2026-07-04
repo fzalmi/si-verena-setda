@@ -26,22 +26,29 @@ export default function ValidasiDataSumber() {
   const [searchParams] = useSearchParams();
   const [tahun, setTahun] = useState(searchParams.get('tahun') || '2027');
 
-  const { data: dokumen = [], isLoading: loadDok, refetch } = useQuery({
+  const { data: dokumenResp, isLoading: loadDok, refetch } = useQuery({
     queryKey: ['dok-validasi', tahun],
     queryFn: () => api.list('dokumen', { tahun: parseInt(tahun), limit: 200 }),
   });
-  const { data: skorList = [] } = useQuery({
+  const dokumen = Array.isArray(dokumenResp?.data) ? dokumenResp.data : [];
+
+  const { data: skorListResp } = useQuery({
     queryKey: ['skor-validasi', tahun],
     queryFn: () => api.list('skor', { tahun: parseInt(tahun) }),
   });
-  const { data: hasilList = [] } = useQuery({
+  const skorList = Array.isArray(skorListResp?.data) ? skorListResp.data : [];
+
+  const { data: hasilListResp } = useQuery({
     queryKey: ['hasil-validasi', tahun],
     queryFn: () => api.list('pemeriksaan', { tahun: parseInt(tahun) }),
   });
-  const { data: fileRef = [] } = useQuery({
+  const hasilList = Array.isArray(hasilListResp?.data) ? hasilListResp.data : [];
+
+  const { data: fileRefResp } = useQuery({
     queryKey: ['file-ref-validasi'],
     queryFn: () => api.list('file-ref', { aktif: 'true' }),
   });
+  const fileRef = Array.isArray(fileRefResp?.data) ? fileRefResp.data : [];
 
   function hasDokJenis(namaBiro, jenis) {
     return dokumen.some(d => d.nama_biro === namaBiro && d.jenis_dokumen === jenis);

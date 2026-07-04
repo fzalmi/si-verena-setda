@@ -74,10 +74,11 @@ export default function KelolaPengguna() {
   const [addCopied, setAddCopied] = useState(false);
   const [addSaving, setAddSaving] = useState(false);
 
-  const { data: users = [] } = useQuery({
+  const { data: usersResp } = useQuery({
     queryKey: ['users-list'],
     queryFn: () => api.list("user"),
   });
+  const users = Array.isArray(usersResp?.data) ? usersResp.data : Array.isArray(usersResp) ? usersResp : [];
 
   const updateUserMutation = useMutation({
     mutationFn: ({ id, data }) => api.update("user", id, data),

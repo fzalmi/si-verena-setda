@@ -69,10 +69,11 @@ export default function UploadRevisi() {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [fileError, setFileError] = useState('');
 
-  const { data: allBiroList = [] } = useQuery({
+  const { data: allBiroResp } = useQuery({
     queryKey: ['biro-list'],
     queryFn: () => api.list("biro"),
   });
+  const allBiroList = Array.isArray(allBiroResp?.data) ? allBiroResp.data : [];
   const biroList = filterBiroByRole(role, allBiroList);
 
   const isSetda = selectedBiro === SETDA_NAME;

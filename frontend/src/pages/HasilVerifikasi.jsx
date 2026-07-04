@@ -26,36 +26,40 @@ export default function HasilVerifikasi() {
   const [selectedBiro, setSelectedBiro] = useState(urlParams.get('biro') || getSingleBiroForRole(role) || '');
   const [tahun, setTahun] = useState('2027');
 
-  const { data: allBiroList = [] } = useQuery({
+  const { data: allBiroResp } = useQuery({
     queryKey: ['biro-list'],
     queryFn: () => api.list("biro"),
   });
+  const allBiroList = Array.isArray(allBiroResp?.data) ? allBiroResp.data : [];
   const biroList = filterBiroByRole(role, allBiroList);
 
-  const { data: results = [] } = useQuery({
+  const { data: resultsResp } = useQuery({
     queryKey: ['hasil-read', selectedBiro, tahun],
     queryFn: () => selectedBiro
       ? api.list('pemeriksaan', { nama_biro: selectedBiro, tahun: parseInt(tahun), limit: 200 })
-      : [],
+      : { data: [] },
     enabled: !!selectedBiro,
   });
+  const results = Array.isArray(resultsResp?.data) ? resultsResp.data : [];
 
   // Semua riwayat (termasuk duplikat per item) untuk perbandingan revisi
-  const { data: allResults = [] } = useQuery({
+  const { data: allResultsResp } = useQuery({
     queryKey: ['hasil-all', selectedBiro, tahun],
     queryFn: () => selectedBiro
       ? api.list('pemeriksaan', { nama_biro: selectedBiro, tahun: parseInt(tahun), limit: 500 })
-      : [],
+      : { data: [] },
     enabled: !!selectedBiro,
   });
+  const allResults = Array.isArray(allResultsResp?.data) ? allResultsResp.data : [];
 
-  const { data: skorData = [] } = useQuery({
+  const { data: skorDataResp } = useQuery({
     queryKey: ['skor-read', selectedBiro, tahun],
     queryFn: () => selectedBiro
       ? api.list('skor', { nama_biro: selectedBiro, tahun: parseInt(tahun) })
-      : [],
+      : { data: [] },
     enabled: !!selectedBiro,
   });
+  const skorData = Array.isArray(skorDataResp?.data) ? skorDataResp.data : [];
 
   const skorDb = skorData[0];
 

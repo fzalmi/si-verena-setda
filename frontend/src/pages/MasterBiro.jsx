@@ -15,10 +15,11 @@ export default function MasterBiro() {
   const [editingBiro, setEditingBiro] = useState(null);
   const [form, setForm] = useState({ nama_biro: '', kode_biro: '', kepala_biro: '' });
 
-  const { data: biroList = [] } = useQuery({
+  const { data: biroResp } = useQuery({
     queryKey: ['biro-list'],
     queryFn: () => api.list("biro"),
   });
+  const biroList = Array.isArray(biroResp?.data) ? biroResp.data : Array.isArray(biroResp) ? biroResp : [];
 
   const createMutation = useMutation({
     mutationFn: (data) => api.create("biro", data),

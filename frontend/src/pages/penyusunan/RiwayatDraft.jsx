@@ -21,10 +21,11 @@ export default function RiwayatDraft() {
   const qc = useQueryClient();
   const [compareIds, setCompareIds] = useState([]);
 
-  const { data: draftList = [], isLoading } = useQuery({
+  const { data: draftListResp, isLoading } = useQuery({
     queryKey: ['draft-renja-list'],
     queryFn: () => api.list('draft', { limit: 50 }),
   });
+  const draftList = Array.isArray(draftListResp?.data) ? draftListResp.data : [];
 
   const deleteMutation = useMutation({
     mutationFn: (id) => api.delete("draftrenjasetda", id),

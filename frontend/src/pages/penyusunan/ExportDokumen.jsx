@@ -11,18 +11,20 @@ export default function ExportDokumen() {
   const [selectedDraftId, setSelectedDraftId] = useState('');
   const [exporting, setExporting] = useState('');
 
-  const { data: draftList = [] } = useQuery({
+  const { data: draftListResp } = useQuery({
     queryKey: ['draft-renja-list'],
     queryFn: () => api.list('draft', { limit: 20 }),
   });
+  const draftList = Array.isArray(draftListResp?.data) ? draftListResp.data : [];
 
   const selectedDraft = draftList.find(d => d.id === selectedDraftId) || draftList[0];
 
-  const { data: babList = [] } = useQuery({
+  const { data: babListResp } = useQuery({
     queryKey: ['draft-bab-export', selectedDraft?.id],
     queryFn: () => api.list("draftrenjabab", { limit: 50 }),
     enabled: !!selectedDraft?.id,
   });
+  const babList = Array.isArray(babListResp?.data) ? babListResp.data : [];
 
   const handleExportDOCX = async () => {
     if (!selectedDraft) return;
