@@ -1,45 +1,51 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { api } from '@/api/client';
 
-const AuthContext = createContext();
+const AuthContext = createContext({
+  user: null,
+  isAuthenticated: false,
+  isLoadingAuth: true,
+  isLoadingPublicSettings: false,
+  authError: null,
+  login: async () => {},
+  register: async () => {},
+  logout: () => {},
+  checkAuth: async () => {},
+  updateUser: () => {},
+  navigateToLogin: () => {},
+});
 
-export const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
-  const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(false);
   const [authError, setAuthError] = useState(null);
 
   useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
     const token = localStorage.getItem('auth_token');
     if (!token) {
       setIsLoadingAuth(false);
       return;
     }
 
-    try {
-      const userData = await api.me();
-      setUser(userData);
-      setIsAuthenticated(true);
-      setAuthError(null);
-    } catch (error) {
-      localStorage.removeItem('auth_token');
-      setAuthError({ type: 'auth_required' });
-    } finally {
-      setIsLoadingAuth(false);
-    }
-  };
+    api.me()
+      .then(userData => {
+        setUser(userData);
+        setIsAuthenticated(true);
+      })
+      .catch(() => {
+        localStorage.removeItem('auth_token');
+      })
+      .finally(() => {
+        setIsLoadingAuth(false);
+      });
+  }, []);
 
   const login = async (email, password) => {
     const { token, user: userData } = await api.login(email, password);
     api.setToken(token);
     setUser(userData);
     setIsAuthenticated(true);
-    setAuthError(null);
     return userData;
   };
 
@@ -51,7 +57,6 @@ export const AuthProvider = ({ children }) => {
     api.setToken(null);
     setUser(null);
     setIsAuthenticated(false);
-    setAuthError(null);
     window.location.href = '/login';
   };
 
@@ -59,33 +64,28 @@ export const AuthProvider = ({ children }) => {
     setUser(prev => ({ ...prev, ...userData }));
   };
 
-  const navigateToLogin = () => {
-    window.location.href = '/login';
+  const value = {
+    user,
+    isAuthenticated,
+    isLoadingAuth,
+    isLoadingPublicSettings: false,
+    authError,
+    login,
+    register,
+    logout,
+    updateUser,
+    navigateToLogin: () => { window.location.href = '/login'; },
   };
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      isAuthenticated,
-      isLoadingAuth,
-      isLoadingPublicSettings,
-      authError,
-      login,
-      register,
-      logout,
-      checkAuth,
-      updateUser,
-      navigateToLogin,
-    }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within AuthProvider');
-  return context;
-};
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
 export default AuthContext;
