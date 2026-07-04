@@ -24,7 +24,7 @@ const app = new Hono<{ Bindings: Bindings }>();
 
 // CORS
 app.use('/api/*', cors({
-  origin: ['http://localhost:5173', 'https://si-verena.pages.dev'],
+  origin: ['http://localhost:5173', 'https://si-verena-setda.pages.dev'],
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
 }));
