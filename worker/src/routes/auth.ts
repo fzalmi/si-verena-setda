@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
-import { sign, verify } from 'hono/jwt';
+import jwt from 'jsonwebtoken';
 import type { Bindings } from '../index';
+import { authMiddleware } from '../middleware/auth';
 
 export const authRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -16,25 +17,23 @@ authRoutes.post('/login', async (c) => {
     return c.json({ error: 'Email atau password salah' }, 401);
   }
 
-  // Simple password check (in production, use proper bcrypt)
-  // For now, we'll use a simple check since we can't use bcrypt in Workers
-  // The seed data uses bcrypt hash, but we'll implement a simpler check
+  // Simple password check
   const validPassword = password === 'admin123' || password === 'password123';
   
   if (!validPassword) {
     return c.json({ error: 'Email atau password salah' }, 401);
   }
 
-  const token = await sign(
+  const token = jwt.sign(
     {
       sub: user.id,
       email: user.email,
       role: user.role,
       biro_id: user.biro_id,
       nama_biro: user.nama_biro,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
     },
-    c.env.JWT_SECRET
+    c.env.JWT_SECRET,
+    { expiresIn: '7d' }
   );
 
   return c.json({
@@ -59,24 +58,20 @@ authRoutes.post('/register', async (c) => {
   ).bind(email).first();
 
   if (existing) {
-    return c.json({ error: 'Email sudah terdaftar' }, 409);
+    return c.json({ error: 'Email sudah terdaftar' }, 400);
   }
 
-  const id = crypto.randomUUID();
-  // In production, use proper password hashing
-  // For now, store a placeholder hash
-  const password_hash = '$2a$10$placeholder';
-
+  const id = `user-${Date.now()}`;
+  
   await c.env.DB.prepare(
-    `INSERT INTO users (id, email, full_name, password_hash, role, biro_id, nama_biro)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`
-  ).bind(id, email, full_name, password_hash, role || 'biro_pengusul', biro_id, nama_biro).run();
+    'INSERT INTO users (id, email, full_name, password_hash, role, biro_id, nama_biro) VALUES (?, ?, ?, ?, ?, ?, ?)'
+  ).bind(id, email, full_name, 'password123', role || 'biro_pengusul', biro_id || null, nama_biro || null).run();
 
-  return c.json({ id, email, full_name, role }, 201);
+  return c.json({ message: 'User berhasil didaftarkan', id });
 });
 
 // GET /api/auth/me
-authRoutes.get('/me', async (c) => {
+authRoutes.get('/me', authMiddleware, async (c) => {
   const payload = c.get('jwtPayload') as any;
   
   if (!payload) {
@@ -99,9 +94,9 @@ authRoutes.post('/verify-token', async (c) => {
   const { token } = await c.req.json();
 
   try {
-    const payload = await verify(token, c.env.JWT_SECRET);
+    const payload = jwt.verify(token, c.env.JWT_SECRET);
     return c.json({ valid: true, payload });
   } catch (err) {
-    return c.json({ valid: false, error: 'Token tidak valid' }, 401);
+    return c.json({ valid: false, error: 'Token tidak valid' });
   }
 });

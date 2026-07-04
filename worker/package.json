@@ -10,10 +10,12 @@
     "db:studio": "wrangler d1 execute si-verena-db --command 'SELECT 1'"
   },
   "dependencies": {
-    "hono": "^4.6.0"
+    "hono": "^4.6.0",
+    "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241218.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "typescript": "^5.7.0",
     "wrangler": "^3.114.17"
   }

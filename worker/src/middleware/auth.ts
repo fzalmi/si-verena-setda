@@ -1,7 +1,8 @@
 import { Context, Next } from 'hono';
-import { verify } from 'hono/jwt';
+import jwt from 'jsonwebtoken';
+import type { Bindings } from '../index';
 
-export const authMiddleware = async (c: Context, next: Next) => {
+export const authMiddleware = async (c: Context<{ Bindings: Bindings }>, next: Next) => {
   const authHeader = c.req.header('Authorization');
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -11,7 +12,7 @@ export const authMiddleware = async (c: Context, next: Next) => {
   const token = authHeader.replace('Bearer ', '');
 
   try {
-    const payload = await verify(token, c.env.JWT_SECRET);
+    const payload = jwt.verify(token, c.env.JWT_SECRET);
     c.set('jwtPayload', payload);
     await next();
   } catch (err) {
@@ -21,7 +22,7 @@ export const authMiddleware = async (c: Context, next: Next) => {
 
 // Role-based access control
 export const requireRole = (...roles: string[]) => {
-  return async (c: Context, next: Next) => {
+  return async (c: Context<{ Bindings: Bindings }>, next: Next) => {
     const payload = c.get('jwtPayload') as any;
     
     if (!payload || !roles.includes(payload.role)) {
