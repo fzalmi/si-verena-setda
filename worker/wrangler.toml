@@ -1,0 +1,28 @@
+name = "si-verena-api"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+# D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "si-verena-db"
+database_id = "YOUR_D1_DATABASE_ID"  # Ganti setelah create D1
+
+# R2 Storage
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "si-verena-files"
+
+# Workers AI (GRATIS!)
+[ai]
+binding = "AI"
+
+# Environment Variables
+[vars]
+JWT_SECRET = "your-jwt-secret-change-this-in-production"
+FRONTEND_URL = "http://localhost:5173"  # Ganti ke production URL
+
+# Development
+[dev]
+port = 8787
+local_protocol = "http"
