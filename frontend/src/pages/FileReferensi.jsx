@@ -22,7 +22,7 @@ const JENIS_LABELS = {
 
 export default function FileReferensi() {
   const queryClient = useQueryClient();
-  const { upload, uploading: isUploading } = useUpload();
+  const { upload, uploading } = useUpload();
   const [showDialog, setShowDialog] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
