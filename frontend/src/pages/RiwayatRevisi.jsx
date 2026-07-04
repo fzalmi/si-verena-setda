@@ -39,8 +39,6 @@ export default function RiwayatRevisi() {
     enabled: !!selectedBiro,
   });
   const revisi = Array.isArray(revisiResp?.data) ? revisiResp.data : [];
-    enabled: !!selectedBiro,
-  });
 
   const allItems = [
     ...dokumen.map(d => ({ ...d, type: 'dokumen' })),
