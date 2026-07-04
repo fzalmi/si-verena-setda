@@ -15,7 +15,9 @@ const statusConfig = {
 };
 
 export default function BiroProgressTable({ skorData = [] }) {
-  if (!skorData.length) {
+  const safeSkorData = Array.isArray(skorData) ? skorData : [];
+  
+  if (!safeSkorData.length) {
     return (
       <div className="text-center py-12 text-muted-foreground text-sm">
         Belum ada data pemeriksaan
@@ -36,7 +38,7 @@ export default function BiroProgressTable({ skorData = [] }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {skorData.map((item) => {
+          {safeSkorData.map((item) => {
             const status = statusConfig[item.status_final] || statusConfig.draft;
             const scoreColor = item.skor_total >= 90 ? 'text-emerald-600' : item.skor_total >= 75 ? 'text-blue-600' : item.skor_total >= 60 ? 'text-amber-600' : 'text-red-600';
             return (
