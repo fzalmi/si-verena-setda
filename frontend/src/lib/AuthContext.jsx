@@ -7,6 +7,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
+  const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(false);
+  const [authError, setAuthError] = useState(null);
 
   useEffect(() => {
     checkAuth();
@@ -23,8 +25,10 @@ export const AuthProvider = ({ children }) => {
       const userData = await api.me();
       setUser(userData);
       setIsAuthenticated(true);
+      setAuthError(null);
     } catch (error) {
       localStorage.removeItem('auth_token');
+      setAuthError({ type: 'auth_required' });
     } finally {
       setIsLoadingAuth(false);
     }
@@ -35,6 +39,7 @@ export const AuthProvider = ({ children }) => {
     api.setToken(token);
     setUser(userData);
     setIsAuthenticated(true);
+    setAuthError(null);
     return userData;
   };
 
@@ -46,6 +51,7 @@ export const AuthProvider = ({ children }) => {
     api.setToken(null);
     setUser(null);
     setIsAuthenticated(false);
+    setAuthError(null);
     window.location.href = '/login';
   };
 
@@ -53,16 +59,23 @@ export const AuthProvider = ({ children }) => {
     setUser(prev => ({ ...prev, ...userData }));
   };
 
+  const navigateToLogin = () => {
+    window.location.href = '/login';
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
       isAuthenticated,
       isLoadingAuth,
+      isLoadingPublicSettings,
+      authError,
       login,
       register,
       logout,
       checkAuth,
       updateUser,
+      navigateToLogin,
     }}>
       {children}
     </AuthContext.Provider>
