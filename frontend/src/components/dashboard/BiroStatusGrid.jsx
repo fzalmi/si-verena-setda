@@ -4,7 +4,7 @@ import { Building2 } from 'lucide-react';
 
 const STATUS_ORDER = ['perlu_revisi', 'sedang_diperiksa', 'draft', 'layak_kirim', 'sudah_dikirim'];
 
-export default function BiroStatusGrid({ biroList = [], ...props, skorData = [], dokumenData = [] }) {
+export default function BiroStatusGrid({ biroList = [], skorData = [], dokumenData = [] }) {
   // Safety check - ensure data is arrays
   const safeSkorData = Array.isArray(skorData) ? skorData : [];
   const safeDokumenData = Array.isArray(dokumenData) ? dokumenData : [];
