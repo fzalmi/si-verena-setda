@@ -8,7 +8,7 @@ const scoreColor = (score) => {
   return 'hsl(0, 72%, 51%)';
 };
 
-export default function ReadinessBarChart({ biroList = [], skorData = [] }) {
+export default function ReadinessBarChart({ biroList = [], ...props, skorData = [] }) {
   const safeSkorData = Array.isArray(skorData) ? skorData : [];
   const data = useMemo(() => {
     const skorByBiro = {};

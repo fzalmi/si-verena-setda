@@ -54,6 +54,7 @@ export default function Dashboard() {
   const filteredSkorData = filterByBiro(skorData);
   const filteredDokumenData = filterByBiro(dokumenData);
   const filteredHasilData = filterByBiro(hasilData);
+  const filteredBiroList = filterBiroByRole(role, biroList);
 
   const totalDokumen = filteredDokumenData.length;
   const sudahDiperiksa = filteredSkorData.filter(s => s.status_final !== 'draft').length;
@@ -151,7 +152,7 @@ export default function Dashboard() {
           <span className="text-xs text-muted-foreground ml-1">— Diurutkan: perlu perhatian lebih dulu</span>
         </div>
         <BiroStatusGrid
-          biroList={filterBiroByRole(role, biroList)}
+          biroList={filteredBiroList}
           skorData={filteredSkorData}
           dokumenData={filteredDokumenData}
         />
@@ -166,11 +167,11 @@ export default function Dashboard() {
           <p className="text-xs text-muted-foreground mb-4">
             Hijau ≥75 · Biru 60–74 · Kuning 40–59 · Merah &lt;40
           </p>
-          <ReadinessBarChart biroList={filterBiroByRole(role, biroList)} skorData={filteredSkorData} />
+          <ReadinessBarChart biroList={filteredBiroList} skorData={filteredSkorData} />
         </div>
         <div className="bg-card rounded-xl border border-border p-6">
           <h3 className="text-sm font-semibold text-foreground mb-4">Distribusi Status Verifikasi</h3>
-          <StatusDonutChart skorData={filteredSkorData} biroList={filterBiroByRole(role, biroList)} />
+          <StatusDonutChart skorData={filteredSkorData} biroList={filteredBiroList} />
         </div>
       </div>
 
