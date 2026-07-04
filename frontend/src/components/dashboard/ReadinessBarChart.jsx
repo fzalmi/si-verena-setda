@@ -9,7 +9,7 @@ const scoreColor = (score) => {
 };
 
 export default function ReadinessBarChart({ biroList = [], skorData = [] }) {
-  const safeSkorData = Array.isArray(skorData) ? skorData : []; {
+  const safeSkorData = Array.isArray(skorData) ? skorData : [];
   const data = useMemo(() => {
     const skorByBiro = {};
     safeSkorData.forEach(s => {

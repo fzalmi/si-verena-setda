@@ -10,7 +10,7 @@ const STATUS_META = [
 ];
 
 export default function StatusDonutChart({ skorData = [], biroList = [] }) {
-  const safeSkorData = Array.isArray(skorData) ? skorData : []; {
+  const safeSkorData = Array.isArray(skorData) ? skorData : [];
   const data = useMemo(() => {
     const skorByBiro = {};
     safeSkorData.forEach(s => {
