@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useOutletContext } from 'react-router-dom';
+import { useAuth } from '@/lib/AuthContext';
 import { api } from '@/api/client';
 import { filterBiroByRole, isRestrictedRole } from '@/lib/roleAccess';
 import { Button } from '@/components/ui/button';
@@ -27,7 +27,7 @@ const NARRATIVE_JENIS = ['narasi_renja', 'renja_biro', 'draft_renja_setda', 'rev
 //    - Intervensi → simpan perubahan manual, status divalidasi
 
 export default function Pemeriksaan() {
-  const { user } = useOutletContext() || {};
+  const { user } = useAuth();
   const role = user?.role;
   const queryClient = useQueryClient();
   const params = new URLSearchParams(window.location.search);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useOutletContext } from 'react-router-dom';
+import { useAuth } from '@/lib/AuthContext';
 import { api } from '@/api/client';
 import { filterBiroByRole, getSingleBiroForRole, isRestrictedRole } from '@/lib/roleAccess';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -11,7 +11,7 @@ import { SETDA_NAME } from '@/pages/UploadRenja';
 import { format } from 'date-fns';
 
 export default function RiwayatRevisi() {
-  const { user } = useOutletContext() || {};
+  const { user } = useAuth();
   const role = user?.role;
   const [selectedBiro, setSelectedBiro] = useState(getSingleBiroForRole(role) || '');
 

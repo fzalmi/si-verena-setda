@@ -1,6 +1,7 @@
+import { useAuth } from '@/lib/AuthContext';
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useOutletContext, useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { api } from '@/api/client';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -31,7 +32,7 @@ const STATUS_DRAFT_CFG = {
 
 export default function EditorDraft() {
   const { id } = useParams();
-  const { user } = useOutletContext() || {};
+  const { user } = () || {};
   const qc = useQueryClient();
   const [activeBabId, setActiveBabId] = useState(null);
   const [editMode, setEditMode] = useState(false);

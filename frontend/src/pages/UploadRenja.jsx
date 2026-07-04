@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useOutletContext } from 'react-router-dom';
+import { useAuth } from '@/lib/AuthContext';
 import { api } from '@/api/client';
 import { useUpload } from '@/hooks/useUpload';
 import { filterBiroByRole, getSingleBiroForRole, isRestrictedRole } from '@/lib/roleAccess';
@@ -51,7 +51,7 @@ const STATUS_CONFIG = {
 };
 
 export default function UploadRenja() {
-  const { user } = useOutletContext() || {};
+  const { user } = useAuth();
   const role = user?.role;
   const queryClient = useQueryClient();
   const { upload, uploading: isUploading } = useUpload();

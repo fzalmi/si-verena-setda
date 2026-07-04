@@ -1,6 +1,7 @@
+import { useAuth } from '@/lib/AuthContext';
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useOutletContext, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { api } from '@/api/client';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -44,7 +45,7 @@ function statusKelayakan(dokumen, skor) {
 }
 
 export default function KompilasiRenjaBiro() {
-  const { user } = useOutletContext() || {};
+  const { user } = () || {};
   const [tahun, setTahun] = useState('2027');
   const [selected, setSelected] = useState([]);
 

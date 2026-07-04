@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useOutletContext } from 'react-router-dom';
+import { useAuth } from '@/lib/AuthContext';
 import { api } from '@/api/client';
 import { filterBiroByRole, getSingleBiroForRole, isRestrictedRole } from '@/lib/roleAccess';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -20,7 +20,7 @@ import { exportVerifikasiExcel } from '@/components/laporan/ExportExcel';
 import { exportVerifikasiWord } from '@/components/laporan/ExportWord';
 
 export default function HasilVerifikasi() {
-  const { user } = useOutletContext() || {};
+  const { user } = useAuth();
   const role = user?.role;
   const urlParams = new URLSearchParams(window.location.search);
   const [selectedBiro, setSelectedBiro] = useState(urlParams.get('biro') || getSingleBiroForRole(role) || '');

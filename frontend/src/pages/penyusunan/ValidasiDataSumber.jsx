@@ -1,6 +1,7 @@
+import { useAuth } from '@/lib/AuthContext';
 import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useOutletContext, Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { api } from '@/api/client';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -21,7 +22,7 @@ const STATUS_CFG = {
 };
 
 export default function ValidasiDataSumber() {
-  const { user } = useOutletContext() || {};
+  const { user } = () || {};
   const [searchParams] = useSearchParams();
   const [tahun, setTahun] = useState(searchParams.get('tahun') || '2027');
 

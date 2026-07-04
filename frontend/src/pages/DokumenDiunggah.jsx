@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useOutletContext } from 'react-router-dom';
+import { useAuth } from '@/lib/AuthContext';
 import { api } from '@/api/client';
 import { filterBiroByRole, isRestrictedRole } from '@/lib/roleAccess';
 import { Button } from '@/components/ui/button';
@@ -44,7 +44,7 @@ const STATUS_CONFIG = {
 };
 
 export default function DokumenDiunggah() {
-  const { user } = useOutletContext() || {};
+  const { user } = useAuth();
   const role = user?.role;
   const queryClient = useQueryClient();
   const [deleteTarget, setDeleteTarget] = useState(null);

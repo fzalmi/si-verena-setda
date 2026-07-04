@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useOutletContext } from 'react-router-dom';
 import { api } from '@/api/client';
+import { useAuth } from '@/lib/AuthContext';
 import { FileText, CheckCircle, AlertTriangle, Clock, BarChart3, TrendingUp, LayoutGrid, Gauge } from 'lucide-react';
 import StatCard from '@/components/dashboard/StatCard';
 import ScoreGauge from '@/components/dashboard/ScoreGauge';
@@ -13,7 +13,7 @@ import StatusDonutChart from '@/components/dashboard/StatusDonutChart';
 import { filterBiroByRole, isRestrictedRole } from '@/lib/roleAccess';
 
 export default function Dashboard() {
-  const { user } = useOutletContext() || {};
+  const { user } = useAuth();
   const role = user?.role;
 
   const { data: biroResponse = { data: [] } } = useQuery({

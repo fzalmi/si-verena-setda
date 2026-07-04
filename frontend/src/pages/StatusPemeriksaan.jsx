@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useOutletContext } from 'react-router-dom';
+import { useAuth } from '@/lib/AuthContext';
 import { api } from '@/api/client';
 import { Link } from 'react-router-dom';
 import { filterBiroByRole, isRestrictedRole } from '@/lib/roleAccess';
@@ -44,7 +44,7 @@ function SkorBar({ label, skor, color }) {
 }
 
 export default function StatusPemeriksaan() {
-  const { user } = useOutletContext() || {};
+  const { user } = useAuth();
   const role = user?.role;
   const [tahun, setTahun] = useState('2027');
   const [expand, setExpand] = useState(null);

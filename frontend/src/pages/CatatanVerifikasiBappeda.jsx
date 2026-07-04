@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useAuth } from '@/lib/AuthContext';
 import { filterBiroByRole, getSingleBiroForRole, isRestrictedRole } from '@/lib/roleAccess';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 const ALL_BIRO_KEYS = Object.keys(CATATAN_BAPPEDA);
 
 export default function CatatanVerifikasiBappeda() {
-  const { user } = useOutletContext() || {};
+  const { user } = useAuth();
   const role = user?.role;
   const [selectedBiro, setSelectedBiro] = useState(getSingleBiroForRole(role) || '');
   const [filterStatus, setFilterStatus] = useState('semua');
