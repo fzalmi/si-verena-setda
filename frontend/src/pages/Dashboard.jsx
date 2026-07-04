@@ -41,7 +41,9 @@ export default function Dashboard() {
   const hasilData = Array.isArray(hasilResponse?.data) ? hasilResponse.data : [];
 
   // Filter data sesuai hak akses biro
-  const allowedBiro = filterBiroByRole(role, biroList).map(b => b.nama_biro);
+  const allowedBiro = Array.isArray(filterBiroByRole(role, biroList)) 
+    ? filterBiroByRole(role, biroList).map(b => b.nama_biro) 
+    : [];
   const filterByBiro = (arr) => {
     if (!Array.isArray(arr)) return [];
     return isRestrictedRole(role)
