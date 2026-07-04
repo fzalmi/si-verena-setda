@@ -45,7 +45,7 @@ function statusKelayakan(dokumen, skor) {
 }
 
 export default function KompilasiRenjaBiro() {
-  const { user } = () || {};
+  const { user } = useAuth();
   const [tahun, setTahun] = useState('2027');
   const [selected, setSelected] = useState([]);
 

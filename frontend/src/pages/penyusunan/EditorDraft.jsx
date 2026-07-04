@@ -32,7 +32,7 @@ const STATUS_DRAFT_CFG = {
 
 export default function EditorDraft() {
   const { id } = useParams();
-  const { user } = () || {};
+  const { user } = useAuth();
   const qc = useQueryClient();
   const [activeBabId, setActiveBabId] = useState(null);
   const [editMode, setEditMode] = useState(false);

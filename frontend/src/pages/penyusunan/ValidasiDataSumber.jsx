@@ -22,7 +22,7 @@ const STATUS_CFG = {
 };
 
 export default function ValidasiDataSumber() {
-  const { user } = () || {};
+  const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const [tahun, setTahun] = useState(searchParams.get('tahun') || '2027');
 

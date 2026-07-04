@@ -71,7 +71,7 @@ Hasilkan narasi lengkap untuk BAB ${nomor} - ${judul}:`;
 }
 
 export default function GenerateDraft() {
-  const { user } = () || {};
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const qc = useQueryClient();
