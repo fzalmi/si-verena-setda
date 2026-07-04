@@ -6,7 +6,7 @@ compatibility_date = "2024-12-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "si-verena-db"
-database_id = "YOUR_D1_DATABASE_ID"  # Ganti setelah create D1
+database_id = "4fce1aee-fddd-46c5-96b7-a1acdec50c83"
 
 # R2 Storage
 [[r2_buckets]]
