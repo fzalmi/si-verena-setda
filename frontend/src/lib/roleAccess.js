@@ -44,6 +44,7 @@ export const ROLE_BIRO_ACCESS = {
  * @returns {Array} array objek biro yang boleh diakses
  */
 export function filterBiroByRole(role, allBiro) {
+  if (!Array.isArray(allBiro)) return [];
   if (!role) return allBiro;
   const allowed = ROLE_BIRO_ACCESS[role];
   if (!allowed) return allBiro; // null atau role tidak terdaftar = semua
