@@ -5,20 +5,24 @@ import { Building2 } from 'lucide-react';
 const STATUS_ORDER = ['perlu_revisi', 'sedang_diperiksa', 'draft', 'layak_kirim', 'sudah_dikirim'];
 
 export default function BiroStatusGrid({ biroList = [], skorData = [], dokumenData = [] }) {
+  // Safety check - ensure data is arrays
+  const safeSkorData = Array.isArray(skorData) ? skorData : [];
+  const safeDokumenData = Array.isArray(dokumenData) ? dokumenData : [];
+  
   // Gabungkan biro yang ada di DB dengan yang sudah punya skor
   const cards = useMemo(() => {
     // Semua nama biro dari biro master
     const allBiroNames = biroList.map(b => b.nama_biro);
     // Skor per biro (ambil terbaru per biro — ambil tahun terbesar)
     const skorByBiro = {};
-    skorData.forEach(s => {
+    safeSkorData.forEach(s => {
       if (!skorByBiro[s.nama_biro] || (s.periode_tahun > skorByBiro[s.nama_biro].periode_tahun)) {
         skorByBiro[s.nama_biro] = s;
       }
     });
     // Hitung jumlah dokumen per biro
     const dokByBiro = {};
-    dokumenData.forEach(d => {
+    safeDokumenData.forEach(d => {
       dokByBiro[d.nama_biro] = (dokByBiro[d.nama_biro] || 0) + 1;
     });
 

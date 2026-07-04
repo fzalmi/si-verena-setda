@@ -9,9 +9,10 @@ const scoreColor = (score) => {
 };
 
 export default function ReadinessBarChart({ biroList = [], skorData = [] }) {
+  const safeSkorData = Array.isArray(skorData) ? skorData : []; {
   const data = useMemo(() => {
     const skorByBiro = {};
-    skorData.forEach(s => {
+    safeSkorData.forEach(s => {
       if (!skorByBiro[s.nama_biro] || s.periode_tahun > skorByBiro[s.nama_biro].periode_tahun) {
         skorByBiro[s.nama_biro] = s;
       }

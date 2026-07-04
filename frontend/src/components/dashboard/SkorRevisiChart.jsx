@@ -31,15 +31,18 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function SkorRevisiChart() {
-  const { data: skorData = [], isLoading } = useQuery({
+  const { data: skorResponse = { data: [] }, isLoading } = useQuery({
     queryKey: ['skor-dokumen'],
     queryFn: () => api.list('skor', { limit: 100 }),
   });
 
-  const { data: riwayatData = [] } = useQuery({
+  const { data: riwayatResponse = { data: [] } } = useQuery({
     queryKey: ['riwayat-revisi-all'],
     queryFn: () => api.list('revisi', { limit: 200 }),
   });
+
+  const skorData = Array.isArray(skorResponse) ? skorResponse : (skorResponse.data || []);
+  const riwayatData = Array.isArray(riwayatResponse) ? riwayatResponse : (riwayatResponse.data || []);
 
   if (isLoading) {
     return (
