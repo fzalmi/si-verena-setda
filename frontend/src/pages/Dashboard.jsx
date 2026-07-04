@@ -20,31 +20,34 @@ export default function Dashboard() {
     queryKey: ['biro-list'],
     queryFn: () => api.list('biro'),
   });
-  const biroList = biroResponse.data || [];
+  const biroList = Array.isArray(biroResponse?.data) ? biroResponse.data : [];
 
   const { data: skorResponse = { data: [] } } = useQuery({
     queryKey: ['skor-dokumen'],
     queryFn: () => api.list('skor', { limit: 50 }),
   });
-  const skorData = skorResponse.data || [];
+  const skorData = Array.isArray(skorResponse?.data) ? skorResponse.data : [];
 
   const { data: dokumenResponse = { data: [] } } = useQuery({
     queryKey: ['dokumen-renja'],
     queryFn: () => api.list('dokumen', { limit: 100 }),
   });
-  const dokumenData = dokumenResponse.data || [];
+  const dokumenData = Array.isArray(dokumenResponse?.data) ? dokumenResponse.data : [];
 
   const { data: hasilResponse = { data: [] } } = useQuery({
     queryKey: ['hasil-pemeriksaan'],
     queryFn: () => api.list('pemeriksaan', { limit: 200 }),
   });
-  const hasilData = hasilResponse.data || [];
+  const hasilData = Array.isArray(hasilResponse?.data) ? hasilResponse.data : [];
 
   // Filter data sesuai hak akses biro
   const allowedBiro = filterBiroByRole(role, biroList).map(b => b.nama_biro);
-  const filterByBiro = (arr) => isRestrictedRole(role)
-    ? arr.filter(item => allowedBiro.includes(item.nama_biro))
-    : arr;
+  const filterByBiro = (arr) => {
+    if (!Array.isArray(arr)) return [];
+    return isRestrictedRole(role)
+      ? arr.filter(item => allowedBiro.includes(item.nama_biro))
+      : arr;
+  };
 
   const filteredSkorData = filterByBiro(skorData);
   const filteredDokumenData = filterByBiro(dokumenData);
