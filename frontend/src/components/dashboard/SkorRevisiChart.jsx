@@ -41,8 +41,8 @@ export default function SkorRevisiChart() {
     queryFn: () => api.list('revisi', { limit: 200 }),
   });
 
-  const skorData = Array.isArray(skorResponse) ? skorResponse : (skorResponse.data || []);
-  const riwayatData = Array.isArray(riwayatResponse) ? riwayatResponse : (riwayatResponse.data || []);
+  const safeSkorData = Array.isArray(skorResponse) ? skorResponse : (skorResponse.data || []);
+  const safeRiwayatData = Array.isArray(riwayatResponse) ? riwayatResponse : (riwayatResponse.data || []);
 
   if (isLoading) {
     return (
@@ -56,13 +56,13 @@ export default function SkorRevisiChart() {
   // Pakai skor_total dari SkorDokumen sebagai skor terbaru
   // Pakai riwayat untuk mencari versi awal jika tersedia
   const biroSkorMap = {};
-  skorData.forEach(s => {
+  safeSkorData.forEach(s => {
     if (!biroSkorMap[s.nama_biro]) biroSkorMap[s.nama_biro] = { terbaru: s.skor_total || 0 };
   });
 
   // Cari versi pertama dari riwayat revisi (versi = 1 atau min versi)
   const riwayatPerBiro = {};
-  riwayatData.forEach(r => {
+  safeRiwayatData.forEach(r => {
     if (!riwayatPerBiro[r.nama_biro]) riwayatPerBiro[r.nama_biro] = [];
     riwayatPerBiro[r.nama_biro].push(r);
   });
